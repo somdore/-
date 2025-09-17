@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+<meta charset="UTF-8">
+<title>តេស្តអ្នកនិពន្ធ</title>
+<style>
+body { font-family: Arial,sans-serif; margin:20px; background:#f9f9f9; }
+h1 { color:#2c3e50; }
+.question { margin:15px 0; padding:10px; background:#fff; border-radius:8px; }
+label { display:block; margin:5px 0; cursor:pointer; }
+button { background:#27ae60; color:white; padding:10px 20px; border:none; border-radius:5px; cursor:pointer; }
+button:hover { background:#219150; }
+#result { margin-top:20px; font-size:1.2em; font-weight:bold; white-space:pre-wrap; }
+#progressContainer { width:100%; background:#ddd; border-radius:20px; height:20px; margin-top:10px; }
+#progressBar { width:0%; height:100%; background:#27ae60; border-radius:20px; text-align:center; color:white; line-height:20px; font-size:12px; }
+</style>
+</head>
+<body>
+
+<h1>តេស្ត៖ តើអ្នកមានដុងជាអ្នកនិពន្ធ?</h1>
+
+<div class="question">
+<p>1. អ្នកចូលចិត្តសរសេរគំនិតថ្មីៗទេ?</p>
+<label><input type="radio" name="q1" value="2"> ច្បាស់ណាស់</label>
+<label><input type="radio" name="q1" value="1"> ម្ដងម្កាល</label>
+<label><input type="radio" name="q1" value="0"> មិនចូលចិត្តទេ</label>
+</div>
+
+<div class="question">
+<p>2. អ្នកអាចកត់សំគាល់ ឬសរសេរចំណាំនៅពេលមានគំនិតកើតឡើង?</p>
+<label><input type="radio" name="q2" value="2"> តែងតែមាន</label>
+<label><input type="radio" name="q2" value="1"> ម្ដងម្កាល</label>
+<label><input type="radio" name="q2" value="0"> មិនដែលទេ</label>
+</div>
+
+<div class="question">
+<p>3. អ្នកចង់ចែករំលែកស្នាដៃរបស់អ្នកឲ្យអ្នកផ្សេងទៀតឬទេ?</p>
+<label><input type="radio" name="q3" value="2"> ចង់ច្រើន</label>
+<label><input type="radio" name="q3" value="1"> ម្ដងម្កាល</label>
+<label><input type="radio" name="q3" value="0"> មិនចង់ទេ</label>
+</div>
+
+<div id="progressContainer"><div id="progressBar">0%</div></div>
+
+<button id="finishBtn">បញ្ចប់តេស្ត</button>
+<div id="result"></div>
+
+<script>
+const totalQuestions = 3;
+
+// Update progress bar
+document.querySelectorAll('input[type="radio"]').forEach(input=>{
+    input.addEventListener('change',()=>{
+        let answered=0;
+        for(let i=1;i<=totalQuestions;i++){
+            if(document.querySelector('input[name="q'+i+'"]:checked')) answered++;
+        }
+        let percent = Math.round(answered/totalQuestions*100);
+        let bar = document.getElementById('progressBar');
+        bar.style.width = percent+'%';
+        bar.innerText = percent+'%';
+    });
+});
+
+// Calculate score
+document.getElementById('finishBtn').addEventListener('click', ()=>{
+    let totalScore =0;
+    for(let i=1;i<=totalQuestions;i++){
+        let ans = document.querySelector('input[name="q'+i+'"]:checked');
+        if(ans) totalScore += parseInt(ans.value);
+    }
+    let text = សរុបពិន្ទុ: ${totalScore} / ${totalQuestions*2}\n\n;
+    if(totalScore>=5) text+="🎉 អ្នកមានដុងជាអ្នកនិពន្ធពិតប្រាកដ!";
+    else if(totalScore>=3) text+="✨ អ្នកមានសក្ដានុពលក្នុងការសរសេរ!";
+    else text+="💡 អ្នកអាចចាប់ផ្តើមហាត់សរសេរបន្តិចៗ។";
+    document.getElementById('result').innerText = text;
+});
+</script>
+
+</body>
+</html>
